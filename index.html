@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Thirumana Nilayam | M9S Event Management - Premium Wedding Planning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&family=Noto+Serif+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ruby: #9B1B3A;
+      --ruby-dark: #6E1028;
+      --ruby-deep: #4A0A1C;
+      --ruby-light: #C4476A;
+      --ruby-pale: #FCEEF2;
+      --gold: #C9952A;
+      --gold-dark: #9A6E14;
+      --gold-light: #F0C96A;
+      --gold-pale: #FDF5E4;
+      --gold-shine: #FFE8A0;
+      --jade: #1A6B4A;
+      --jade-light: #E6F5EE;
+      --sapphire: #1B3D9B;
+      --sapphire-l: #EEF2FF;
+      --ink: #1C0A14;
+      --ink-soft: #3D1F2A;
+      --muted: #8C6E78;
+      --cream: #FEFAF5;
+      --warm-white: #FFFBF7;
+      --border: #F0D8DE;
+      --border-gold: #EDD5A0;
+      --sh-xs: 0 1px 4px rgba(155,27,58,0.06);
+      --sh-sm: 0 4px 12px rgba(155,27,58,0.09);
+      --sh-md: 0 8px 28px rgba(155,27,58,0.12);
+      --sh-lg: 0 16px 48px rgba(155,27,58,0.15);
+      --sh-gold: 0 6px 20px rgba(201,149,42,0.25);
+      --ff-display: 'Cormorant Garamond', serif;
+      --ff-body: 'Nunito', sans-serif;
+      --ff-tamil: 'Noto Serif Tamil', serif;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--ff-body);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--ruby-light); border-radius: 3px; }
+
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 10% 20%, rgba(155,27,58,0.04) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 80% at 90% 80%, rgba(201,149,42,0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .serif { font-family: var(--ff-display); }
+    h1, h2, h3 { font-family: var(--ff-display); font-weight: 700; line-height: 1.2; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes modalPop { from { transform: scale(0.92) translateY(16px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    @keyframes goldFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 9px; padding: 13px 30px; border-radius: 50px;
+      font-family: var(--ff-body); font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: all 0.3s var(--ease); border: none;
+      white-space: nowrap;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--ruby) 0%, var(--ruby-light) 100%); color: #fff; box-shadow: 0 4px 16px rgba(155,27,58,0.35); }
+    .btn-primary:hover { background: linear-gradient(135deg, var(--ruby-dark) 0%, var(--ruby) 100%); transform: translateY(-2px); }
+    .btn-outline { background: rgba(255,255,255,0.92); border: 2px solid var(--ruby); color: var(--ruby); backdrop-filter: blur(6px); }
+    .btn-outline:hover { background: var(--ruby); color: #fff; transform: translateY(-2px); }
+    .btn-sm { padding: 9px 20px; font-size: 12.5px; }
+    .btn-full { width: 100%; }
+    .btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--ruby-deep); box-shadow: var(--sh-gold); }
+
+    .navbar {
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(16px);
+      position: sticky; top: 0; z-index: 900;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-container {
+      max-width: 1300px; margin: 0 auto; padding: 0 28px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: var(--ff-display); font-size: 26px; font-weight: 700;
+      color: var(--ruby); display: flex; align-items: center; gap: 10px;
+      cursor: pointer;
+    }
+    .logo i { font-size: 28px; color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links a, .nav-links span, .nav-links button {
+      font-weight: 600; font-size: 13.5px; cursor: pointer;
+      text-decoration: none; padding: 8px 14px; border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .nav-links a { color: var(--ink-soft); background: none; }
+    .nav-links a:hover { color: var(--ruby); background: var(--ruby-pale); }
+    .menu-toggle { display: none; background: none; border: none; font-size: 24px; color: var(--ruby); cursor: pointer; }
+    .mobile-menu { display: none; flex-direction: column; background: #fff; border-top: 1px solid var(--border); padding: 16px 24px; gap: 4px; }
+    .mobile-menu.show { display: flex; }
+    .mobile-menu a { padding: 12px 16px; font-weight: 600; cursor: pointer; }
+
+    .hero {
+      position: relative;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(74,10,28,0.85), rgba(155,27,58,0.75), rgba(201,149,42,0.7));
+    }
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(74,10,28,0.6), rgba(155,27,58,0.5), rgba(201,149,42,0.4));
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      padding: 80px 32px;
+    }
+    .hero-title { font-size: clamp(38px, 7vw, 72px); color: #fff; font-weight: 700; margin-bottom: 22px; }
+    .gold-text { background: linear-gradient(90deg, var(--gold-shine), var(--gold-light), var(--gold-shine)); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: goldFlow 4s linear infinite; }
+    .stats { display: flex; justify-content: center; gap: 0; margin-top: 48px; flex-wrap: wrap; }
+    .stat-item { padding: 20px 40px; border-right: 1px solid rgba(255,255,255,0.15); text-align: center; }
+    .stat-number { font-family: var(--ff-display); font-size: 42px; font-weight: 700; background: linear-gradient(90deg, var(--gold-shine), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+    .container { max-width: 1300px; margin: 0 auto; padding: 0 28px; }
+    section { padding: 80px 0; }
+    .section-title { font-size: clamp(28px, 4vw, 42px); color: var(--ruby); margin-bottom: 14px; text-align: center; }
+    .section-subtitle { text-align: center; color: var(--muted); margin-bottom: 48px; font-size: 16px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .grid-2, .grid-3, .grid-4 { display: grid; gap: 28px; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+    /* Profile Cards */
+    .profile-card {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid #eee;
+    }
+    .profile-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -12px rgba(155, 27, 58, 0.2);
+      border-color: var(--gold-light);
+    }
+    .profile-avatar {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .profile-avatar i { font-size: 64px; color: rgba(255,255,255,0.9); }
+    .avatar-grad-1 { background: linear-gradient(135deg, #9B1B3A, #C4476A); }
+    .avatar-grad-2 { background: linear-gradient(135deg, #1A6B4A, #4CAF7D); }
+    .avatar-grad-3 { background: linear-gradient(135deg, #1B3D9B, #4A6FD8); }
+    .avatar-grad-4 { background: linear-gradient(135deg, #C9952A, #F0C96A); }
+    .avatar-grad-5 { background: linear-gradient(135deg, #6B1B9B, #9B4DD8); }
+    .avatar-grad-6 { background: linear-gradient(135deg, #D97706, #F59E0B); }
+    .avatar-grad-7 { background: linear-gradient(135deg, #0F766E, #14B8A6); }
+    .avatar-grad-8 { background: linear-gradient(135deg, #BE123C, #F43F5E); }
+
+    .profile-info { padding: 20px; }
+    .profile-name { font-family: var(--ff-display); font-size: 20px; font-weight: 700; color: var(--ruby-dark); margin-bottom: 6px; }
+    .profile-details { font-size: 13px; color: #666; margin: 4px 0; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .badge-caste { display: inline-block; background: linear-gradient(135deg, #FEF3C7, #FDE68A); color: #92400E; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-top: 8px; }
+    .badge-verified { display: inline-block; background: linear-gradient(135deg, #D1FAE5, #A7F3D0); color: #065F46; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-left: 8px; }
+
+    /* Service Cards */
+    .service-card {
+      background: #fff; border-radius: 24px; padding: 28px; border: none;
+      transition: all 0.35s var(--ease); height: 100%;
+      box-shadow: var(--sh-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--ruby), var(--gold));
+    }
+    .service-card:nth-child(1)::before { background: linear-gradient(90deg, #9B1B3A, #C4476A); }
+    .service-card:nth-child(2)::before { background: linear-gradient(90deg, #1A6B4A, #4CAF7D); }
+    .service-card:nth-child(3)::before { background: linear-gradient(90deg, #1B3D9B, #4A6FD8); }
+    .service-card:nth-child(4)::before { background: linear-gradient(90deg, #C9952A, #F0C96A); }
+    .service-card:nth-child(5)::before { background: linear-gradient(90deg, #6B1B9B, #9B4DD8); }
+    .service-card:nth-child(6)::before { background: linear-gradient(90deg, #D97706, #F59E0B); }
+    .service-card:nth-child(7)::before { background: linear-gradient(90deg, #0F766E, #14B8A6); }
+    .service-card:nth-child(8)::before { background: linear-gradient(90deg, #BE123C, #F43F5E); }
+    .service-card:hover { transform: translateY(-8px); box-shadow: var(--sh-lg); }
+    .service-icon { font-size: 42px; margin-bottom: 18px; display: inline-block; }
+    .service-card h3 { font-size: 22px; margin-bottom: 16px; color: var(--ruby-dark); }
+    .service-card ul { list-style: none; padding-left: 0; }
+    .service-card li { padding: 8px 0; font-size: 13.5px; color: var(--ink-soft); border-bottom: 1px dashed var(--border); display: flex; align-items: center; gap: 10px; }
+    .service-card li i { color: var(--ruby); width: 20px; font-size: 12px; }
+    .service-card li:last-child { border-bottom: none; }
+
+    /* Package Cards */
+    .package-card {
+      background: #fff; border-radius: 24px; padding: 28px; text-align: center;
+      transition: all 0.35s var(--ease); border: 1px solid var(--border);
+    }
+    .package-card:hover { transform: translateY(-8px); box-shadow: var(--sh-lg); border-color: var(--gold); }
+    .package-card.featured { border: 2px solid var(--gold); background: linear-gradient(135deg, #fff, var(--gold-pale)); }
+    .package-title { font-size: 28px; font-weight: 800; color: var(--ruby); margin-bottom: 8px; font-family: var(--ff-display); }
+    .package-subtitle { font-size: 13px; color: var(--gold); font-weight: 700; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+    .package-features { list-style: none; text-align: left; margin: 24px 0; }
+    .package-features li { padding: 10px 0; font-size: 13px; display: flex; align-items: center; gap: 10px; border-bottom: 1px dashed var(--border); }
+    .package-features li i { color: var(--ruby); width: 20px; }
+
+    .videos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
+    .video-card { background: #fff; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s; }
+    .video-card:hover { transform: translateY(-6px); box-shadow: var(--sh-md); }
+    .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+    .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ruby-dark); margin-bottom: 7px; }
+    input, select, textarea { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-family: var(--ff-body); font-size: 14px; background: var(--warm-white); transition: all 0.25s; }
+    input:focus, select:focus, textarea:focus { border-color: var(--ruby); box-shadow: 0 0 0 4px rgba(155,27,58,0.08); outline: none; }
+
+    .card { background: rgba(255,255,255,0.96); border-radius: 20px; padding: 32px; border: 1px solid var(--border); box-shadow: var(--sh-xs); transition: all 0.3s var(--ease); }
+
+    .modal { display: none; position: fixed; inset: 0; background: rgba(28,10,20,0.65); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; }
+    .modal.show { display: flex; }
+    .modal-content { background: #fff; border-radius: 28px; max-width: 520px; width: 100%; animation: modalPop 0.3s var(--ease); }
+    .modal-header { padding: 28px 28px 0; display: flex; justify-content: flex-end; }
+    .modal-body { padding: 20px 28px 28px; }
+    .modal-close { background: var(--ruby-pale); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; }
+
+    .toast { position: fixed; bottom: 28px; right: 28px; padding: 14px 22px; border-radius: 14px; z-index: 3000; animation: slideInRight 0.35s; display: flex; align-items: center; gap: 12px; font-weight: 600; background: var(--jade); color: white; box-shadow: var(--sh-lg); }
+    .toast.error { background: linear-gradient(135deg,#C0392B,#E05040); }
+    .toast.info { background: linear-gradient(135deg,#1B3D9B,#3A6AD8); }
+
+    footer { background: var(--ruby-deep); color: rgba(255,255,255,0.7); padding: 56px 28px 28px; margin-top: 40px; }
+    .footer-inner { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
+    .feature-card { background: #fff; border-radius: 22px; padding: 36px 28px; text-align: center; border: 1px solid var(--border); transition: all 0.35s var(--ease); cursor: pointer; }
+    .feature-card:hover { transform: translateY(-8px); box-shadow: var(--sh-lg); border-color: var(--border-gold); }
+    .feature-icon { width: 74px; height: 74px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; font-size: 30px; background: var(--ruby-pale); color: var(--ruby); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: block; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .hero { min-height: 70vh; }
+    }
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--muted); }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+  const EMAILJS_PUBLIC_KEY = "OBwbDluYBz5rNSszX";
+  const EMAILJS_SERVICE_ID = "service_s1j030q";
+  const EMAILJS_TEMPLATE_ID = "template_xqh5y4i";
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  let registeredUsers = [];
+  let currentUser = null;
+  let currentPage = "home";
+
+  const TAMIL_DISTRICTS = ["Chennai","Coimbatore","Madurai","Tiruchirappalli","Salem","Tirunelveli","Vellore","Erode","Thanjavur","Dindigul","Kanyakumari","Virudhunagar","Tiruppur","Nagapattinam","Cuddalore","Kanchipuram"];
+  const CASTES = ["Brahmin","Mudaliar","Gounder","Nadar","Thevar","Chettiar","Pillai","Naicker","Yadav","Vellalar","Vanniyar"];
+  const GRAD_CLASSES = ["avatar-grad-1","avatar-grad-2","avatar-grad-3","avatar-grad-4","avatar-grad-5","avatar-grad-6","avatar-grad-7","avatar-grad-8"];
+
+  function showToast(msg, type = "success") { 
+    document.querySelectorAll('.toast').forEach(t=>t.remove());
+    let div = document.createElement('div'); 
+    div.className = `toast ${type}`; 
+    div.innerHTML = `<i class="fas ${type==='success'?'fa-check-circle':type==='error'?'fa-exclamation-circle':'fa-envelope'}"></i> ${msg}`;
+    document.body.appendChild(div); 
+    setTimeout(()=>div.remove(),4000);
+  }
+
+  async function sendWelcomeEmail(email, name) {
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { email, name, reply_to: "panneerselvam944393@gmail.com", from_name: "Thirumana Nilayam", to_name: name });
+      showToast(`✓ Welcome email sent to ${email}!`, "success");
+      return true;
+    } catch(e) { return false; }
+  }
+
+  function generateSeedProfiles() {
+    let profiles = [];
+    let maleNames = ["Arjun", "Karthik", "Senthil", "Prakash", "Vignesh", "Gokul", "Dinesh", "Ramesh"];
+    let femaleNames = ["Kavitha", "Meenakshi", "Divya", "Priyanka", "Lakshmi", "Revathi", "Saranya", "Nithya"];
+    let surnames = ["Kumar", "Rajan", "Murugan", "Selvam", "Subramanian", "Pillai"];
+    let occs = ["Software Engineer", "Doctor", "Teacher", "Business Owner", "Bank Officer", "Civil Engineer"];
+    let incomes = ["₹5-8 LPA", "₹8-12 LPA", "₹12-18 LPA", "₹18-25 LPA"];
+    for(let i = 0; i < 20; i++){
+      let isMale = i % 2 === 0;
+      let fn = isMale ? maleNames[i % maleNames.length] : femaleNames[i % femaleNames.length];
+      let sn = surnames[i % surnames.length];
+      let age = 22 + (i % 16);
+      profiles.push({ 
+        id: `p${i+1}`, name: `${fn} ${sn}`, age, district: TAMIL_DISTRICTS[i % TAMIL_DISTRICTS.length], 
+        caste: CASTES[i % CASTES.length], occupation: occs[i % occs.length], income: incomes[i % incomes.length], 
+        about: `I'm a ${occs[i % occs.length]} from ${TAMIL_DISTRICTS[i % TAMIL_DISTRICTS.length]}, family oriented.`, 
+        gender: isMale ? "Male" : "Female", email: `${fn.toLowerCase()}${i+1}@example.com`, password: "demo123",
+        verified: i % 3 !== 0, premium: i % 5 === 0, gradClass: GRAD_CLASSES[i % GRAD_CLASSES.length],
+        prefAgeMin: 22, prefAgeMax: 35
+      });
+    }
+    return profiles;
+  }
+
+  function loadData() { 
+    let stored = localStorage.getItem("thirumana_m9s_full"); 
+    if(stored) registeredUsers = JSON.parse(stored); 
+    else registeredUsers = generateSeedProfiles(); 
+    saveData(); 
+  }
+  function saveData() { localStorage.setItem("thirumana_m9s_full", JSON.stringify(registeredUsers)); }
+  function getMatches() { 
+    if(!currentUser) return []; 
+    let opp = currentUser.gender === "Male" ? "Female" : "Male"; 
+    return registeredUsers.filter(u => u.id !== currentUser.id && u.gender === opp && 
+      u.age >= (currentUser.prefAgeMin || 18) && u.age <= (currentUser.prefAgeMax || 60));
+  }
+  function getAllExceptCurrent() { return currentUser ? registeredUsers.filter(u => u.id !== currentUser.id) : registeredUsers; }
+
+  function openProfileModal(profile) {
+    let modal = document.getElementById('profileModal');
+    let bodyDiv = document.getElementById('modalBody');
+    if(!modal) return;
+    bodyDiv.innerHTML = `<div style="text-align:center;"><div style="width:100px;height:100px;background:linear-gradient(135deg,var(--ruby-light),var(--ruby));border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:48px;color:white;"><i class="fas fa-user-circle"></i></div><h2 class="serif" style="color:var(--ruby);">${profile.name}</h2><div><span class="badge-caste">${profile.caste}</span>${profile.verified ? '<span class="badge-verified">✓ Verified</span>' : ''}</div></div><hr><div class="grid-2"><div><strong>Age:</strong> ${profile.age}</div><div><strong>District:</strong> ${profile.district}</div><div><strong>Occupation:</strong> ${profile.occupation}</div><div><strong>Income:</strong> ${profile.income}</div></div><p><strong>About:</strong> ${profile.about}</p><div style="display:flex;gap:12px;margin-top:24px;"><button class="btn btn-primary" style="flex:1;" onclick="window.sendInterestFromModal('${profile.id}')"><i class="fas fa-heart"></i> Send Interest</button><button class="btn btn-outline" style="flex:1;" onclick="closeModal()">Close</button></div>`;
+    modal.classList.add('show');
+  }
+  function closeModal() { document.getElementById('profileModal')?.classList.remove('show'); }
+  async function sendInterestFromModal(id) { 
+    if(!currentUser) { showToast("Please login first", "error"); changePage('matrilogin'); closeModal(); return; }
+    showToast(`💌 Interest sent successfully!`, "success"); closeModal(); 
+  }
+  function viewProfileDetails(id) { let p = registeredUsers.find(u => u.id === id); if(p) openProfileModal(p); }
+
+  function ProfileCard(p) { 
+    return `<div class="profile-card" onclick="viewProfileDetails('${p.id}')">
+      <div class="profile-avatar ${p.gradClass}"><i class="fas fa-user-circle"></i></div>
+      <div class="profile-info">
+        <div class="profile-name">${p.name}</div>
+        <div class="profile-details"><i class="fas fa-map-marker-alt"></i> ${p.age} yrs · ${p.district}</div>
+        <div class="profile-details"><i class="fas fa-briefcase"></i> ${p.occupation} · ${p.income}</div>
+        <span class="badge-caste">${p.caste}</span>
+        ${p.verified ? '<span class="badge-verified">✓ Verified</span>' : ''}
+      </div>
+    </div>`; 
+  }
+
+  function BrowseProfileCard(p) { 
+    return `<div class="profile-card">
+      <div class="profile-avatar ${p.gradClass}"><i class="fas fa-user-circle"></i></div>
+      <div class="profile-info">
+        <div class="profile-name">${p.name}</div>
+        <div class="profile-details"><i class="fas fa-map-marker-alt"></i> ${p.age} yrs · ${p.district}</div>
+        <div class="profile-details"><i class="fas fa-briefcase"></i> ${p.occupation} · ${p.income}</div>
+        <span class="badge-caste">${p.caste}</span>
+        ${p.verified ? '<span class="badge-verified">✓ Verified</span>' : ''}
+        <div style="display:flex; gap:12px; margin-top:16px;">
+          <button class="btn btn-primary btn-sm" style="flex:1;" onclick="event.stopPropagation();viewProfileDetails('${p.id}')"><i class="fas fa-eye"></i> View</button>
+          <button class="btn btn-outline btn-sm" style="flex:1;" onclick="event.stopPropagation();sendInterestFromModal('${p.id}')"><i class="fas fa-heart"></i> Interest</button>
+        </div>
+      </div>
+    </div>`; 
+  }
+
+  // Auth Functions
+  window.handleLogin = () => {
+    let email = document.getElementById("loginEmail")?.value.trim();
+    let password = document.getElementById("loginPassword")?.value;
+    if(!email || !password) { showToast("Please enter email and password", "error"); return; }
+    let user = registeredUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+    if(user) { currentUser = user; showToast(`Welcome back ${user.name}!`, "success"); changePage("matridashboard"); } 
+    else { showToast("Invalid email or password", "error"); }
+  };
+
+  window.handleRegister = () => {
+    let name = document.getElementById("regName")?.value.trim();
+    let email = document.getElementById("regEmail")?.value.trim();
+    let password = document.getElementById("regPassword")?.value;
+    let confirmPassword = document.getElementById("regConfirmPassword")?.value;
+    let gender = document.getElementById("regGender")?.value;
+    if(!name || !email || !password) { showToast("Please fill all required fields", "error"); return; }
+    if(password !== confirmPassword) { showToast("Passwords do not match", "error"); return; }
+    if(password.length < 4) { showToast("Password must be at least 4 characters", "error"); return; }
+    if(registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase())) { showToast("Email already registered", "error"); return; }
+    let newUser = { 
+      id: `user_${Date.now()}`, name, gender, age: 25, email, password,
+      mobile: document.getElementById("regMobile")?.value || "",
+      district: "", caste: "", occupation: "", height: "5'6\"", income: "", about: "", verified: true,
+      prefAgeMin: 22, prefAgeMax: 35, gradClass: GRAD_CLASSES[Math.floor(Math.random() * GRAD_CLASSES.length)]
+    };
+    registeredUsers.push(newUser);
+    saveData();
+    currentUser = newUser;
+    showToast(`✓ Account created! Welcome ${name.split(' ')[0]}!`, "success");
+    changePage("matricreateprofile");
+  };
+
+  window.saveProfile = () => {
+    if(!currentUser) return;
+    currentUser.district = document.getElementById("profileDistrict")?.value || "";
+    currentUser.caste = document.getElementById("profileCaste")?.value || "";
+    currentUser.occupation = document.getElementById("profileOcc")?.value || "";
+    currentUser.about = document.getElementById("profileAbout")?.value || "";
+    currentUser.prefAgeMin = parseInt(document.getElementById("prefMinAge")?.value) || 22;
+    currentUser.prefAgeMax = parseInt(document.getElementById("prefMaxAge")?.value) || 35;
+    let idx = registeredUsers.findIndex(u => u.id === currentUser.id);
+    if(idx !== -1) registeredUsers[idx] = currentUser;
+    saveData();
+    sendWelcomeEmail(currentUser.email, currentUser.name);
+    showToast(`✓ Profile completed!`, "success");
+    changePage("matridashboard");
+  };
+
+  window.logout = () => { currentUser = null; changePage("home"); showToast("Logged out.", "info"); };
+  window.submitEventEnquiry = () => { showToast("✓ Enquiry sent! Our team will contact you.", "success"); };
+
+  function Navbar() { 
+    return `<nav class="navbar"><div class="nav-container"><div class="logo" onclick="changePage('home')"><i class="fas fa-ring"></i> <span>Thirumana Nilayam <span style="font-size:12px;color:var(--gold);">| M9S Events</span></span></div><div class="nav-links">${currentUser ? `<a onclick="changePage('matrimony')">Matrimony</a><a onclick="changePage('events')">Events</a><a onclick="changePage('event-contact')">Contact</a><span>👋 ${currentUser.name.split(' ')[0]}</span><button class="btn btn-outline btn-sm" onclick="logout()">Logout</button><a onclick="changePage('matridashboard')">Dashboard</a>` : `<button class="btn btn-outline btn-sm" onclick="changePage('matrilogin')">Login / Register</button>`}</div><button class="menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button></div><div id="mobileMenu" class="mobile-menu">${currentUser ? `<a onclick="changePage('matrimony')">Matrimony</a><a onclick="changePage('events')">Events</a><a onclick="changePage('matridashboard')">Dashboard</a><a onclick="logout()">Logout</a>` : `<a onclick="changePage('matrilogin')">Login / Register</a>`}</div></nav>`; 
+  }
+  function ModalComp() { return `<div id="profileModal" class="modal" onclick="if(event.target===this) closeModal()"><div class="modal-content"><div class="modal-header"><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body" id="modalBody"></div></div></div>`; }
+
+  // ==================== FULL EVENTS PAGE WITH BROCHURE DETAILS ====================
+  function EventsPage() {
+    return `${Navbar()}
+    <div class="hero" style="min-height:55vh;">
+      <img class="hero-bg" src="https://images.pexels.com/photos/3822608/pexels-photo-3822608.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Wedding">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">M9S Event Management</h1>
+        <p style="font-size:20px; margin-bottom:10px;">Complete Wedding Planning & Execution Portfolio</p>
+        <p style="font-size:16px; opacity:0.9; max-width:600px; margin:0 auto;">FROM CONCEPT TO CELEBRATION — We plan, design, and execute your wedding down to the finest detail, ensuring a bespoke, stress-free, and beautiful experience for your family.</p>
+        <button class="btn btn-primary" style="margin-top:32px;" onclick="changePage('event-contact')">Get Free Consultation →</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- 8 Core Wedding Services -->
+      <h2 class="section-title">Core Wedding Services</h2>
+      <p class="section-subtitle">Complete wedding planning from pre-wedding to on-day execution</p>
+      <div class="grid-2">
+        <div class="service-card"><div class="service-icon"><i class="fas fa-calendar-alt" style="color:#9B1B3A;"></i></div><h3>1. Pre-Wedding Planning</h3><ul><li><i class="fas fa-check-circle"></i> Wedding Concept & Theme Design</li><li><i class="fas fa-check-circle"></i> Budget Planning & Consultation</li><li><i class="fas fa-check-circle"></i> Premium Venue Selection & Booking</li><li><i class="fas fa-check-circle"></i> Vendor Sourcing & Management</li><li><i class="fas fa-check-circle"></i> Bespoke Invitation Design & Printing</li><li><i class="fas fa-check-circle"></i> Detailed Wedding Timeline Mapping</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-flower" style="color:#1A6B4A;"></i></div><h3>2. Decoration & Setup</h3><ul><li><i class="fas fa-check-circle"></i> Traditional, Modern, or Royal Themes</li><li><i class="fas fa-check-circle"></i> Grand Mandap & Stage Setup</li><li><i class="fas fa-check-circle"></i> Exquisite Floral Artistry & Accents</li><li><i class="fas fa-check-circle"></i> Immersive Entrance Arch & Walkway</li><li><i class="fas fa-check-circle"></i> Ambiance Lighting & High-End LED Walls</li><li><i class="fas fa-check-circle"></i> Custom Reception Backdrop Designs</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-music" style="color:#1B3D9B;"></i></div><h3>3. Entertainment & Technicals</h3><ul><li><i class="fas fa-check-circle"></i> Professional DJ & Custom Playlists</li><li><i class="fas fa-check-circle"></i> Live Orchestra & Traditional Nadaswaram</li><li><i class="fas fa-check-circle"></i> Concert-Grade Sound & Light Layouts</li><li><i class="fas fa-check-circle"></i> Cinematic LED Screens & Visual Effects</li><li><i class="fas fa-check-circle"></i> Special Effects & Custom Dance Floor</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-camera" style="color:#C9952A;"></i></div><h3>4. Premium Photography & Media</h3><ul><li><i class="fas fa-check-circle"></i> Creative Candid & Portrait Photography</li><li><i class="fas fa-check-circle"></i> Traditional Event Photography</li><li><i class="fas fa-check-circle"></i> Cinematic Wedding Film & Teasers</li><li><i class="fas fa-check-circle"></i> High-Definition Drone Visuals</li><li><i class="fas fa-check-circle"></i> Pre-Wedding Location Shoots</li><li><i class="fas fa-check-circle"></i> Global Multi-Camera Live Streaming</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-utensils" style="color:#6B1B9B;"></i></div><h3>5. Catering & Hospitality</h3><ul><li><i class="fas fa-check-circle"></i> Curated Menu Planning & Tasting</li><li><i class="fas fa-check-circle"></i> Full-Scale Catering Coordination</li><li><i class="fas fa-check-circle"></i> Professional Guest Welcome Hostesses</li><li><i class="fas fa-check-circle"></i> Polished Reception Floor Management</li><li><i class="fas fa-check-circle"></i> VIP Guest Care & Protocol Handling</li><li><i class="fas fa-check-circle"></i> Custom-Wrapped Return Gifts</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-car" style="color:#D97706;"></i></div><h3>6. Logistics & Guest Care</h3><ul><li><i class="fas fa-check-circle"></i> Grand Bride & Groom Entry Concepts</li><li><i class="fas fa-check-circle"></i> Luxury Fleet & Logistics Coordination</li><li><i class="fas fa-check-circle"></i> Guest Accommodation Management</li><li><i class="fas fa-check-circle"></i> Welcoming Guest Registration Desks</li><li><i class="fas fa-check-circle"></i> Valet & Organized Parking Setup</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-female" style="color:#0F766E;"></i></div><h3>7. Bridal & Styling Services</h3><ul><li><i class="fas fa-check-circle"></i> Elite Makeup Artists Coordination</li><li><i class="fas fa-check-circle"></i> Costume Styling & Draping Assistance</li><li><i class="fas fa-check-circle"></i> Themed Mehendi Function Setup</li><li><i class="fas fa-check-circle"></i> Vibrant Haldi Ceremony Styling</li><li><i class="fas fa-check-circle"></i> Engagement Event Choreography</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-chalkboard-teacher" style="color:#BE123C;"></i></div><h3>8. On-Day Execution</h3><ul><li><i class="fas fa-check-circle"></i> On-Site Event Directors & Managers</li><li><i class="fas fa-check-circle"></i> Rigorous Stage & Program Flow Tracking</li><li><i class="fas fa-check-circle"></i> Dedicated Family Liaison Assistants</li><li><i class="fas fa-check-circle"></i> Technical & Vendor Backup Teams</li><li><i class="fas fa-check-circle"></i> Instant Emergency Support Protocols</li></ul></div>
+      </div>
+
+      <!-- Signature Packages -->
+      <h2 class="section-title" style="margin-top: 60px;">Signature Packages</h2>
+      <p class="section-subtitle">Choose the perfect wedding package tailored to your vision</p>
+      <div class="grid-4">
+        <div class="package-card"><div class="package-title">★ Silver Package</div><div class="package-subtitle">Essential Elegance</div><ul class="package-features"><li><i class="fas fa-check-circle"></i> Traditional/Modern Stage Setup</li><li><i class="fas fa-check-circle"></i> Essential Audio Arrangements</li><li><i class="fas fa-check-circle"></i> Traditional Photography Coverage</li><li><i class="fas fa-check-circle"></i> Basic Timeline Management</li><li><i class="fas fa-check-circle"></i> Ideal for Intimate Gatherings</li></ul><button class="btn btn-outline btn-sm" style="width:100%;" onclick="changePage('event-contact')">Enquire Now</button></div>
+        <div class="package-card featured"><div class="package-title">★ Gold Package</div><div class="package-subtitle">The Popular Choice</div><ul class="package-features"><li><i class="fas fa-check-circle"></i> Artistic Venue Decor</li><li><i class="fas fa-check-circle"></i> Sound & Ambient Lighting Systems</li><li><i class="fas fa-check-circle"></i> Complete Candid & Traditional Photography</li><li><i class="fas fa-check-circle"></i> Comprehensive Day-of Coordination</li><li><i class="fas fa-check-circle"></i> Seamless Event Flow Management</li></ul><button class="btn btn-primary btn-sm" style="width:100%;" onclick="changePage('event-contact')">Enquire Now</button></div>
+        <div class="package-card"><div class="package-title">★ Platinum Package</div><div class="package-subtitle">Premium Luxury</div><ul class="package-features"><li><i class="fas fa-check-circle"></i> Custom High-End Floral Styling</li><li><i class="fas fa-check-circle"></i> Expansive LED Wall Backdrops</li><li><i class="fas fa-check-circle"></i> Full Cinematic Wedding Film with Drone</li><li><i class="fas fa-check-circle"></i> Guest Hospitality Hosts</li><li><i class="fas fa-check-circle"></i> Complete Pre-Wedding Consulting</li></ul><button class="btn btn-outline btn-sm" style="width:100%;" onclick="changePage('event-contact')">Enquire Now</button></div>
+        <div class="package-card"><div class="package-title">★ Royal Package</div><div class="package-subtitle">Turnkey Magnificence</div><ul class="package-features"><li><i class="fas fa-check-circle"></i> Immersive Grand Themes</li><li><i class="fas fa-check-circle"></i> Celebrity Styling Coordination</li><li><i class="fas fa-check-circle"></i> Premium Culinary Catering Management</li><li><i class="fas fa-check-circle"></i> Complete Logistics Handling</li><li><i class="fas fa-check-circle"></i> Full Concierge Services for Families</li></ul><button class="btn btn-gold btn-sm" style="width:100%;" onclick="changePage('event-contact')">Enquire Now</button></div>
+      </div>
+
+      <!-- Video Gallery -->
+      <h2 class="section-title" style="margin-top: 60px;">📸 Recent Wedding Gallery</h2>
+      <p class="section-subtitle">Watch our beautifully executed wedding celebrations</p>
+      <div class="videos-grid">
+        <div class="video-card"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/0XIrJFa1W9w" frameborder="0" allowfullscreen></iframe></div><h3>Grand Chennai Wedding</h3><p>Complete A-Z wedding services by M9S Events</p></div>
+        <div class="video-card"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/vY7q_rKf2L8" frameborder="0" allowfullscreen></iframe></div><h3>Royal Reception Ceremony</h3><p>Elegant reception with elaborate decor and lighting</p></div>
+        <div class="video-card"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/S4DmbF1A8M8" frameborder="0" allowfullscreen></iframe></div><h3>Tamil Traditional Wedding</h3><p>Beautiful ceremony with all rituals and customs</p></div>
+      </div>
+
+      <!-- Call to Action -->
+      <div style="text-align:center; margin: 60px 0 40px; padding: 48px; background: linear-gradient(135deg, var(--ruby-pale), var(--gold-pale)); border-radius: 28px;">
+        <i class="fas fa-quote-left" style="font-size: 48px; color: var(--ruby-light); opacity: 0.6;"></i>
+        <p style="font-size: 24px; font-family: var(--ff-display); font-weight: 600; margin-top: 16px;">Let's design your dream celebration together.</p>
+        <p style="color: var(--ruby); font-weight: 600; margin-top: 8px;">M9S Event Management — Premium Wedding Planning & Management Services</p>
+        <button class="btn btn-primary" style="margin-top: 28px;" onclick="changePage('event-contact')">Get Free Consultation →</button>
+      </div>
+    </div>
+
+    <footer><div class="footer-inner"><div><div class="logo" style="color:var(--gold);">M9S Event Management</div><p>Premium Wedding Planning & Management Services — From Concept to Celebration</p></div><div><h4>Quick Links</h4><div><a style="cursor:pointer;display:block;" onclick="changePage('home')">Home</a><a style="cursor:pointer;display:block;" onclick="changePage('events')">Events</a></div></div><div><h4>Contact</h4><p>📞 +91 94439 43933</p><p>✉️ info@m9s.asia</p></div></div><div style="text-align:center;margin-top:32px;">© 2025 M9S Event Management · All rights reserved.</div></footer>${ModalComp()}`;
+  }
+
+  // Other Page Components
+  function HomePage() { 
+    return `${Navbar()}<div class="hero"><img class="hero-bg" src="https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=1600"><div class="hero-overlay"></div><div class="hero-content"><h1 class="hero-title"><span class="gold-text">Find Your Soulmate</span> & Dream Wedding</h1><p style="font-size:18px;margin-bottom:20px;">தமிழ் திருமண மேடை & M9S Event Management — Complete Wedding Solutions</p><div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;"><button class="btn btn-primary" onclick="changePage('matrilogin')">Get Started →</button><button class="btn btn-outline" onclick="changePage('events')">Explore Events →</button></div><div class="stats"><div class="stat-item"><div class="stat-number">1L+</div><div class="stat-label">Profiles</div></div><div class="stat-item"><div class="stat-number">500+</div><div class="stat-label">Events</div></div><div class="stat-item"><div class="stat-number">10+</div><div class="stat-label">Years</div></div></div></div></div>
+    <section><div class="container"><h2 class="section-title">Our Services</h2><div class="grid-2"><div class="feature-card" onclick="changePage('matrilogin')"><div class="feature-icon"><i class="fas fa-heart"></i></div><h3>Tamil Matrimony</h3><p>Thousands of verified profiles, horoscope matching, secure matchmaking.</p><button class="btn btn-outline btn-sm" style="margin-top:16px;">Explore →</button></div><div class="feature-card" onclick="changePage('events')"><div class="feature-icon"><i class="fas fa-ring"></i></div><h3>Wedding Planning</h3><p>End-to-end management: decoration, catering, photography, coordination.</p><button class="btn btn-outline btn-sm" style="margin-top:16px;">Plan Wedding →</button></div></div></div></section>
+    <section style="background:var(--ruby-pale);"><div class="container"><h2 class="section-title">✨ Featured Profiles</h2><div class="grid-3">${registeredUsers.slice(0,6).map(p => ProfileCard(p)).join('')}</div><div style="text-align:center;margin-top:32px;"><button class="btn btn-primary" onclick="changePage('matrilogin')">View All Profiles →</button></div></div></section>
+    <footer><div class="footer-inner"><div><div class="logo" style="color:var(--gold);">Thirumana Nilayam | M9S Events</div><p>Tamil Nadu's premium matrimony & event management platform.</p></div><div><h4>Quick Links</h4><div><a style="cursor:pointer;display:block;" onclick="changePage('home')">Home</a><a style="cursor:pointer;display:block;" onclick="changePage('events')">Events</a></div></div><div><h4>Contact</h4><p>📞 +91 94439 43933</p><p>✉️ info@m9s.asia</p></div></div><div style="text-align:center;margin-top:32px;">© 2025 Thirumana Nilayam · All rights reserved.</div></footer>${ModalComp()}`; 
+  }
+
+  function MatrimonyPage() { return `${Navbar()}<div class="container" style="padding:40px 28px;"><h1 class="section-title">✨ Tamil Matrimony ✨</h1><div class="grid-3">${getAllExceptCurrent().map(p => BrowseProfileCard(p)).join('')}</div></div>${ModalComp()}`; }
+  function MatriLoginPage() { return `${Navbar()}<div class="container" style="max-width:460px;margin:60px auto;"><div class="card"><div style="text-align:center;"><i class="fas fa-heart" style="font-size:48px;color:var(--ruby);"></i><h2 class="serif">Welcome</h2></div><div class="form-group"><label>Email</label><input id="loginEmail" placeholder="your@email.com"></div><div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div><button class="btn btn-primary btn-full" onclick="handleLogin()">Sign In</button><div style="margin:20px 0; text-align:center;"><span>New User?</span></div><button class="btn btn-outline btn-full" onclick="changePage('matriregister')">Create Account</button><p style="font-size:12px;text-align:center;margin-top:20px;color:var(--muted);">Demo: arjun1@example.com / demo123</p></div></div>`; }
+  function MatriRegisterPage() { return `${Navbar()}<div class="container" style="max-width:540px;margin:40px auto;"><div class="card"><h2 class="serif" style="color:var(--ruby);text-align:center;">Create Account</h2><div class="form-group"><label>Full Name</label><input id="regName"></div><div class="form-group"><label>Gender</label><select id="regGender"><option>Male</option><option>Female</option></select></div><div class="form-group"><label>Email</label><input type="email" id="regEmail"></div><div class="form-group"><label>Mobile</label><input id="regMobile"></div><div class="form-group"><label>Password</label><input type="password" id="regPassword" placeholder="Min 4 chars"></div><div class="form-group"><label>Confirm Password</label><input type="password" id="regConfirmPassword"></div><button class="btn btn-primary btn-full" onclick="handleRegister()">Create Account →</button></div></div>`; }
+  function MatriCreateProfilePage() { return `${Navbar()}<div class="container" style="max-width:680px;margin:40px auto;"><div class="card"><h2 class="serif" style="color:var(--ruby);">Complete Your Profile</h2><div class="grid-2"><div class="form-group"><label>District</label><select id="profileDistrict">${TAMIL_DISTRICTS.map(d => `<option>${d}</option>`).join('')}</select></div><div class="form-group"><label>Caste</label><select id="profileCaste">${CASTES.map(c => `<option>${c}</option>`).join('')}</select></div><div class="form-group"><label>Occupation</label><input id="profileOcc"></div></div><div class="form-group"><label>About Me</label><textarea id="profileAbout" rows="3"></textarea></div><div class="grid-2"><div class="form-group"><label>Min Age</label><input id="prefMinAge" type="number" value="22"></div><div class="form-group"><label>Max Age</label><input id="prefMaxAge" type="number" value="35"></div></div><button class="btn btn-primary btn-full" onclick="saveProfile()">Save Profile →</button></div></div>`; }
+  function MatriDashboardPage() { if(!currentUser) return "Please login"; let matches = getMatches(); return `${Navbar()}<div class="container" style="margin-top:40px;"><div class="card" style="background:linear-gradient(135deg,var(--ruby),var(--ruby-dark));color:white;text-align:center;"><h2>Welcome ${currentUser.name.split(' ')[0]}! 💐</h2><p><strong>${matches.length}</strong> potential matches</p><button class="btn btn-gold" onclick="changePage('matrimatches')">View Matches →</button></div><div style="margin-top:48px;"><h3 class="serif" style="color:var(--ruby);">🌟 Recommended for You</h3><div class="grid-3">${matches.slice(0,6).map(p => ProfileCard(p)).join('')}</div></div></div>${ModalComp()}`; }
+  function MatriMatchesPage() { if(!currentUser) return "Please login"; let matches = getMatches(); return `${Navbar()}<div class="container" style="margin:40px auto;"><h2 class="section-title">💖 Your Matches (${matches.length})</h2><div class="grid-3">${matches.length ? matches.map(p => ProfileCard(p)).join('') : '<div class="empty-state">No matches yet</div>'}</div></div>${ModalComp()}`; }
+  function EventContactPage() { return `${Navbar()}<div class="container" style="margin:60px auto;"><h2 class="section-title">Plan Your Wedding</h2><div class="grid-2"><div class="card"><h3>Contact</h3><p>📞 +91 94439 43933</p><p>✉️ info@m9s.asia</p></div><div class="card"><h3>Enquiry</h3><div class="form-group"><input id="eventName" placeholder="Your Name"></div><div class="form-group"><input id="eventEmail" placeholder="Email"></div><div class="form-group"><input id="eventPhone" placeholder="Phone"></div><textarea rows="3" id="eventMessage" placeholder="Event details"></textarea><button class="btn btn-primary btn-full" style="margin-top:16px;" onclick="submitEventEnquiry()">Send</button></div></div></div>`; }
+
+  function toggleMobileMenu() { let menu = document.getElementById("mobileMenu"); if(menu) menu.classList.toggle("show"); }
+  function changePage(page) { currentPage = page; render(); }
+  function render() {
+    let pages = { home: HomePage, events: EventsPage, matrimony: MatrimonyPage, matrilogin: MatriLoginPage, matriregister: MatriRegisterPage, matricreateprofile: MatriCreateProfilePage, matridashboard: MatriDashboardPage, matrimatches: MatriMatchesPage, "event-contact": EventContactPage };
+    let app = document.getElementById("app");
+    app.innerHTML = (pages[currentPage] || HomePage)();
+    window.scrollTo(0, 0);
+  }
+
+  window.changePage = changePage; window.toggleMobileMenu = toggleMobileMenu; window.closeModal = closeModal;
+  window.sendInterestFromModal = sendInterestFromModal; window.viewProfileDetails = viewProfileDetails;
+  window.submitEventEnquiry = submitEventEnquiry; window.handleLogin = handleLogin;
+  window.handleRegister = handleRegister; window.saveProfile = saveProfile; window.logout = logout;
+
+  loadData();
+  render();
+</script>
+</body>
+</html>
