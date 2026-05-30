@@ -216,23 +216,13 @@
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
       background: linear-gradient(90deg, var(--ruby), var(--gold));
     }
-    .service-card:nth-child(1)::before { background: linear-gradient(90deg, #9B1B3A, #C4476A); }
-    .service-card:nth-child(2)::before { background: linear-gradient(90deg, #1A6B4A, #4CAF7D); }
-    .service-card:nth-child(3)::before { background: linear-gradient(90deg, #1B3D9B, #4A6FD8); }
-    .service-card:nth-child(4)::before { background: linear-gradient(90deg, #C9952A, #F0C96A); }
-    .service-card:nth-child(5)::before { background: linear-gradient(90deg, #6B1B9B, #9B4DD8); }
-    .service-card:nth-child(6)::before { background: linear-gradient(90deg, #D97706, #F59E0B); }
-    .service-card:nth-child(7)::before { background: linear-gradient(90deg, #0F766E, #14B8A6); }
-    .service-card:nth-child(8)::before { background: linear-gradient(90deg, #BE123C, #F43F5E); }
     .service-card:hover { transform: translateY(-8px); box-shadow: var(--sh-lg); }
     .service-icon { font-size: 42px; margin-bottom: 18px; display: inline-block; }
     .service-card h3 { font-size: 22px; margin-bottom: 16px; color: var(--ruby-dark); }
     .service-card ul { list-style: none; padding-left: 0; }
     .service-card li { padding: 8px 0; font-size: 13.5px; color: var(--ink-soft); border-bottom: 1px dashed var(--border); display: flex; align-items: center; gap: 10px; }
     .service-card li i { color: var(--ruby); width: 20px; font-size: 12px; }
-    .service-card li:last-child { border-bottom: none; }
 
-    /* Package Cards */
     .package-card {
       background: #fff; border-radius: 24px; padding: 28px; text-align: center;
       transition: all 0.35s var(--ease); border: 1px solid var(--border);
@@ -287,10 +277,14 @@
 <body>
 <div id="app"></div>
 <script>
+  // ==================== EMAILJS CONFIGURATION ====================
   const EMAILJS_PUBLIC_KEY = "OBwbDluYBz5rNSszX";
   const EMAILJS_SERVICE_ID = "service_s1j030q";
   const EMAILJS_TEMPLATE_ID = "template_xqh5y4i";
   emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  // Company email for enquiries
+  const COMPANY_EMAIL = "panneer.v.vtr@gmail.com";
 
   let registeredUsers = [];
   let currentUser = null;
@@ -309,12 +303,62 @@
     setTimeout(()=>div.remove(),4000);
   }
 
+  // Send welcome email to new user
   async function sendWelcomeEmail(email, name) {
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { email, name, reply_to: "panneerselvam944393@gmail.com", from_name: "Thirumana Nilayam", to_name: name });
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { 
+        email, name, 
+        reply_to: COMPANY_EMAIL, 
+        from_name: "Thirumana Nilayam", 
+        to_name: name 
+      });
       showToast(`✓ Welcome email sent to ${email}!`, "success");
       return true;
     } catch(e) { return false; }
+  }
+
+  // Send event enquiry email to company
+  async function sendEventEnquiryEmail(customerName, customerEmail, customerPhone, eventType, message) {
+    try {
+      const templateParams = {
+        email: COMPANY_EMAIL,
+        name: customerName,
+        to_name: "M9S Events Team",
+        from_name: customerName,
+        reply_to: customerEmail,
+        message: `
+📋 NEW EVENT ENQUIRY RECEIVED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 Customer Name: ${customerName}
+📧 Email: ${customerEmail}
+📞 Phone: ${customerPhone || "Not provided"}
+🎉 Event Type: ${eventType || "Wedding/Event"}
+
+📝 Message:
+${message || "No additional message provided."}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Please contact the customer at the earliest convenience.
+
+- M9S Event Management System
+        `,
+        event_type: eventType || "Wedding Planning"
+      };
+      
+      const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      if (response.status === 200) {
+        showToast("✓ Enquiry sent! Our team will contact you shortly.", "success");
+        return true;
+      }
+    } catch (error) {
+      console.error("Email sending failed:", error);
+      showToast("Failed to send enquiry. Please try again later.", "error");
+      return false;
+    }
+    return false;
   }
 
   function generateSeedProfiles() {
@@ -450,14 +494,70 @@
   };
 
   window.logout = () => { currentUser = null; changePage("home"); showToast("Logged out.", "info"); };
-  window.submitEventEnquiry = () => { showToast("✓ Enquiry sent! Our team will contact you.", "success"); };
+  
+  // Submit event enquiry - sends email to company
+  window.submitEventEnquiry = async () => {
+    let name = document.getElementById("eventName")?.value.trim();
+    let email = document.getElementById("eventEmail")?.value.trim();
+    let phone = document.getElementById("eventPhone")?.value.trim();
+    let eventTypeSelect = document.getElementById("eventType");
+    let eventType = eventTypeSelect?.value || "Wedding/Event";
+    let message = document.getElementById("eventMessage")?.value.trim();
+    
+    if(!name) { showToast("Please enter your name", "error"); return; }
+    if(!email) { showToast("Please enter your email", "error"); return; }
+    
+    showToast("Sending enquiry...", "info");
+    await sendEventEnquiryEmail(name, email, phone, eventType, message);
+    
+    // Clear form
+    if(document.getElementById("eventName")) document.getElementById("eventName").value = "";
+    if(document.getElementById("eventEmail")) document.getElementById("eventEmail").value = "";
+    if(document.getElementById("eventPhone")) document.getElementById("eventPhone").value = "";
+    if(document.getElementById("eventMessage")) document.getElementById("eventMessage").value = "";
+  };
 
-  function Navbar() { 
-    return `<nav class="navbar"><div class="nav-container"><div class="logo" onclick="changePage('home')"><i class="fas fa-ring"></i> <span>Thirumana Nilayam <span style="font-size:12px;color:var(--gold);">| M9S Events</span></span></div><div class="nav-links">${currentUser ? `<a onclick="changePage('matrimony')">Matrimony</a><a onclick="changePage('events')">Events</a><a onclick="changePage('event-contact')">Contact</a><span>👋 ${currentUser.name.split(' ')[0]}</span><button class="btn btn-outline btn-sm" onclick="logout()">Logout</button><a onclick="changePage('matridashboard')">Dashboard</a>` : `<button class="btn btn-outline btn-sm" onclick="changePage('matrilogin')">Login / Register</button>`}</div><button class="menu-toggle" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button></div><div id="mobileMenu" class="mobile-menu">${currentUser ? `<a onclick="changePage('matrimony')">Matrimony</a><a onclick="changePage('events')">Events</a><a onclick="changePage('matridashboard')">Dashboard</a><a onclick="logout()">Logout</a>` : `<a onclick="changePage('matrilogin')">Login / Register</a>`}</div></nav>`; 
-  }
+function Navbar() {
+  return `
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo" onclick="changePage('home')">
+          <i class="fas fa-ring"></i>
+          <span>Thirumana Nilayam <span style="font-size:25px;color:var(--gold);">|</span></span>
+          <img src="logo/logo.jpg" alt="M9S Logo" style="height:25px; margin-left:0px; vertical-align:middle;">
+        </div>
+        <div class="nav-links">
+          ${currentUser ? `
+            <a onclick="changePage('matrimony')">Matrimony</a>
+            <a onclick="changePage('events')">Events</a>
+            <a onclick="changePage('event-contact')">Contact</a>
+            <span>👋 ${currentUser.name.split(' ')[0]}</span>
+            <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+            <a onclick="changePage('matridashboard')">Dashboard</a>
+          ` : `
+            <button class="btn btn-outline btn-sm" onclick="changePage('matrilogin')">Login / Register</button>
+          `}
+        </div>
+        <button class="menu-toggle" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <div id="mobileMenu" class="mobile-menu">
+        ${currentUser ? `
+          <a onclick="changePage('matrimony')">Matrimony</a>
+          <a onclick="changePage('events')">Events</a>
+          <a onclick="changePage('matridashboard')">Dashboard</a>
+          <a onclick="logout()">Logout</a>
+        ` : `
+          <a onclick="changePage('matrilogin')">Login / Register</a>
+        `}
+      </div>
+    </nav>
+  `;
+}
   function ModalComp() { return `<div id="profileModal" class="modal" onclick="if(event.target===this) closeModal()"><div class="modal-content"><div class="modal-header"><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body" id="modalBody"></div></div></div>`; }
 
-  // ==================== FULL EVENTS PAGE WITH BROCHURE DETAILS ====================
+  // Full Events Page
   function EventsPage() {
     return `${Navbar()}
     <div class="hero" style="min-height:55vh;">
@@ -472,7 +572,6 @@
     </div>
 
     <div class="container">
-      <!-- 8 Core Wedding Services -->
       <h2 class="section-title">Core Wedding Services</h2>
       <p class="section-subtitle">Complete wedding planning from pre-wedding to on-day execution</p>
       <div class="grid-2">
@@ -486,7 +585,6 @@
         <div class="service-card"><div class="service-icon"><i class="fas fa-chalkboard-teacher" style="color:#BE123C;"></i></div><h3>8. On-Day Execution</h3><ul><li><i class="fas fa-check-circle"></i> On-Site Event Directors & Managers</li><li><i class="fas fa-check-circle"></i> Rigorous Stage & Program Flow Tracking</li><li><i class="fas fa-check-circle"></i> Dedicated Family Liaison Assistants</li><li><i class="fas fa-check-circle"></i> Technical & Vendor Backup Teams</li><li><i class="fas fa-check-circle"></i> Instant Emergency Support Protocols</li></ul></div>
       </div>
 
-      <!-- Signature Packages -->
       <h2 class="section-title" style="margin-top: 60px;">Signature Packages</h2>
       <p class="section-subtitle">Choose the perfect wedding package tailored to your vision</p>
       <div class="grid-4">
@@ -496,16 +594,12 @@
         <div class="package-card"><div class="package-title">★ Royal Package</div><div class="package-subtitle">Turnkey Magnificence</div><ul class="package-features"><li><i class="fas fa-check-circle"></i> Immersive Grand Themes</li><li><i class="fas fa-check-circle"></i> Celebrity Styling Coordination</li><li><i class="fas fa-check-circle"></i> Premium Culinary Catering Management</li><li><i class="fas fa-check-circle"></i> Complete Logistics Handling</li><li><i class="fas fa-check-circle"></i> Full Concierge Services for Families</li></ul><button class="btn btn-gold btn-sm" style="width:100%;" onclick="changePage('event-contact')">Enquire Now</button></div>
       </div>
 
-      <!-- Video Gallery -->
-      <h2 class="section-title" style="margin-top: 60px;">📸 Recent Wedding Gallery</h2>
-      <p class="section-subtitle">Watch our beautifully executed wedding celebrations</p>
       <div class="videos-grid">
         <div class="video-card"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/0XIrJFa1W9w" frameborder="0" allowfullscreen></iframe></div><h3>Grand Chennai Wedding</h3><p>Complete A-Z wedding services by M9S Events</p></div>
         <div class="video-card"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/vY7q_rKf2L8" frameborder="0" allowfullscreen></iframe></div><h3>Royal Reception Ceremony</h3><p>Elegant reception with elaborate decor and lighting</p></div>
         <div class="video-card"><div class="video-wrapper"><iframe src="https://www.youtube.com/embed/S4DmbF1A8M8" frameborder="0" allowfullscreen></iframe></div><h3>Tamil Traditional Wedding</h3><p>Beautiful ceremony with all rituals and customs</p></div>
       </div>
 
-      <!-- Call to Action -->
       <div style="text-align:center; margin: 60px 0 40px; padding: 48px; background: linear-gradient(135deg, var(--ruby-pale), var(--gold-pale)); border-radius: 28px;">
         <i class="fas fa-quote-left" style="font-size: 48px; color: var(--ruby-light); opacity: 0.6;"></i>
         <p style="font-size: 24px; font-family: var(--ff-display); font-weight: 600; margin-top: 16px;">Let's design your dream celebration together.</p>
@@ -513,7 +607,6 @@
         <button class="btn btn-primary" style="margin-top: 28px;" onclick="changePage('event-contact')">Get Free Consultation →</button>
       </div>
     </div>
-
     <footer><div class="footer-inner"><div><div class="logo" style="color:var(--gold);">M9S Event Management</div><p>Premium Wedding Planning & Management Services — From Concept to Celebration</p></div><div><h4>Quick Links</h4><div><a style="cursor:pointer;display:block;" onclick="changePage('home')">Home</a><a style="cursor:pointer;display:block;" onclick="changePage('events')">Events</a></div></div><div><h4>Contact</h4><p>📞 +91 94439 43933</p><p>✉️ info@m9s.asia</p></div></div><div style="text-align:center;margin-top:32px;">© 2025 M9S Event Management · All rights reserved.</div></footer>${ModalComp()}`;
   }
 
@@ -531,7 +624,9 @@
   function MatriCreateProfilePage() { return `${Navbar()}<div class="container" style="max-width:680px;margin:40px auto;"><div class="card"><h2 class="serif" style="color:var(--ruby);">Complete Your Profile</h2><div class="grid-2"><div class="form-group"><label>District</label><select id="profileDistrict">${TAMIL_DISTRICTS.map(d => `<option>${d}</option>`).join('')}</select></div><div class="form-group"><label>Caste</label><select id="profileCaste">${CASTES.map(c => `<option>${c}</option>`).join('')}</select></div><div class="form-group"><label>Occupation</label><input id="profileOcc"></div></div><div class="form-group"><label>About Me</label><textarea id="profileAbout" rows="3"></textarea></div><div class="grid-2"><div class="form-group"><label>Min Age</label><input id="prefMinAge" type="number" value="22"></div><div class="form-group"><label>Max Age</label><input id="prefMaxAge" type="number" value="35"></div></div><button class="btn btn-primary btn-full" onclick="saveProfile()">Save Profile →</button></div></div>`; }
   function MatriDashboardPage() { if(!currentUser) return "Please login"; let matches = getMatches(); return `${Navbar()}<div class="container" style="margin-top:40px;"><div class="card" style="background:linear-gradient(135deg,var(--ruby),var(--ruby-dark));color:white;text-align:center;"><h2>Welcome ${currentUser.name.split(' ')[0]}! 💐</h2><p><strong>${matches.length}</strong> potential matches</p><button class="btn btn-gold" onclick="changePage('matrimatches')">View Matches →</button></div><div style="margin-top:48px;"><h3 class="serif" style="color:var(--ruby);">🌟 Recommended for You</h3><div class="grid-3">${matches.slice(0,6).map(p => ProfileCard(p)).join('')}</div></div></div>${ModalComp()}`; }
   function MatriMatchesPage() { if(!currentUser) return "Please login"; let matches = getMatches(); return `${Navbar()}<div class="container" style="margin:40px auto;"><h2 class="section-title">💖 Your Matches (${matches.length})</h2><div class="grid-3">${matches.length ? matches.map(p => ProfileCard(p)).join('') : '<div class="empty-state">No matches yet</div>'}</div></div>${ModalComp()}`; }
-  function EventContactPage() { return `${Navbar()}<div class="container" style="margin:60px auto;"><h2 class="section-title">Plan Your Wedding</h2><div class="grid-2"><div class="card"><h3>Contact</h3><p>📞 +91 94439 43933</p><p>✉️ info@m9s.asia</p></div><div class="card"><h3>Enquiry</h3><div class="form-group"><input id="eventName" placeholder="Your Name"></div><div class="form-group"><input id="eventEmail" placeholder="Email"></div><div class="form-group"><input id="eventPhone" placeholder="Phone"></div><textarea rows="3" id="eventMessage" placeholder="Event details"></textarea><button class="btn btn-primary btn-full" style="margin-top:16px;" onclick="submitEventEnquiry()">Send</button></div></div></div>`; }
+  function EventContactPage() { 
+    return `${Navbar()}<div class="container" style="margin:60px auto;"><h2 class="section-title">Plan Your Dream Wedding</h2><div class="grid-2"><div class="card"><h3>Contact Information</h3><p><i class="fas fa-phone"></i> 📞 +91 94439 43933</p><p><i class="fas fa-envelope"></i> ✉️ info@m9s.asia</p><p><i class="fas fa-map-marker-alt"></i> 📍 Chennai, Tamil Nadu</p><p><i class="fab fa-whatsapp"></i> WhatsApp: +91 94439 43933</p><p style="margin-top:16px; font-size:12px; color:var(--muted);">Enquiries sent to: panneer.v.vtr@gmail.com</p></div><div class="card"><h3>Send Enquiry</h3><div class="form-group"><label>Your Name *</label><input id="eventName" placeholder="Full Name"></div><div class="form-group"><label>Email *</label><input type="email" id="eventEmail" placeholder="your@email.com"></div><div class="form-group"><label>Phone Number</label><input id="eventPhone" placeholder="+91 XXXXXXXXXX"></div><div class="form-group"><label>Event Type</label><select id="eventType"><option value="Wedding">Wedding</option><option value="Engagement">Engagement</option><option value="Reception">Reception</option><option value="Birthday">Birthday</option><option value="Corporate Event">Corporate Event</option><option value="Other">Other</option></select></div><div class="form-group"><label>Message / Requirements</label><textarea rows="3" id="eventMessage" placeholder="Tell us about your event..."></textarea></div><button class="btn btn-primary btn-full" onclick="submitEventEnquiry()">Send Enquiry <i class="fas fa-arrow-right"></i></button><p style="font-size:11px; color:var(--muted); margin-top:12px;">* Your enquiry will be sent to our event management team at panneer.v.vtr@gmail.com</p></div></div></div><footer><div class="footer-inner"><div><div class="logo" style="color:var(--gold);">M9S Events</div><p>Premium Wedding Planning & Management</p></div><div><h4>Contact</h4><p>📞 +91 94439 43933</p><p>✉️ info@m9s.asia</p></div></div></footer>`; 
+  }
 
   function toggleMobileMenu() { let menu = document.getElementById("mobileMenu"); if(menu) menu.classList.toggle("show"); }
   function changePage(page) { currentPage = page; render(); }
